@@ -1,7 +1,7 @@
 #lang racket
 ;; TDA image
 
-
+(require "TDA_PIXBIT.rkt")
 
 ;; image - constructor
 ;; Nombre:  image
@@ -11,12 +11,9 @@
 
 (define (image Width Height . pix)
   (cond
-    [(bitmap? (car pix))
-     (bitwrap Height Height Width Width pix)]
-    [(pixmap? (car pix))
-     (bitwrap Height Height Width Width pix)]
-    [(hexmap? (car pix))
-     (bitwrap Height Height Width Width pix)]))
+    [(bitmap? (list pix)) ; debo crear la lista antes
+     (bitwrap Height Height Width Width (list pix))]
+    ))
 
 
 
@@ -26,15 +23,18 @@
 ;; Recorrido: image
 ;; Descripción: crea una image de manera recursiva
 
-(define (bitwrap Height Width pixbit-d)
-  (define (bitmap Height1 Height2 Width1 Width2 pixbit-d column map)
-    (if
-      (and (not(> Height1 0)) (not(> Width1 0))) map
-      (if
-        (> Height1 0) (bitmap (- Height1 1) Height2 Width1 Width2 (cdr pixbit-d) (cons column (car pixbit-d)) map)
-        (bitmap (Height2) Height2 (- Width1 1) Width2 (cdr pixbit-d) '() (cons map column)))))
-  (bitmap Height Height Width Width pixbit-d '() '()))
 
+
+(define (columna H P C)
+  (if (= H 0) C
+      (columna (- H 1) (cdr P) (cons C (car P)))))
+
+(define (bitwrap H W pix)
+  (define (bitmap H H2 W pix C map)
+    (if (= W 0) map
+        (if (= H 0) (bitmap H2 H2 (- W 1) pix '() (cons map C))
+            (bitmap (- H 1) H2 W (cdr pix) (cons C (car pix)) map))))
+  (bitmap H H W pix '() '()))
 
 
 
@@ -44,9 +44,7 @@
 ;; Recorrido: boolean
 ;; Descripción: permite determinar si la imagen corresponde a un bitmap-d
 
-(define (bitmap? pix)
-  (if (eq? "pixbit-d" pix)#t
-      (#f)))
+
 
 
 ;;
@@ -55,18 +53,13 @@
 ;; Recorrido: boolean
 ;; Descripción: permite determinar si la imagen corresponde a un pixmap-d
 
-(define (pixmap? pix)
-  (if (eq? "pixrgb-d" pix)#t
-      (#f)))
+
 
 ;;
 ;; Nombre: hexmap?
 ;; Dominio: image
 ;; Recorrido: boolean
 ;; Descripción: permite determinar si la imagen corresponde a un hexmap-d
-(define (hexmap? pix)
-  (if (eq? "pixhex-d" pix)#t
-      (#f)))
 
 
 ;;
@@ -81,6 +74,11 @@
 ;; Dominio: image
 ;; Recorrido: image
 ;; Descripción: permite invertir una imagen horizontalmente
+
+(define (flipH map)
+  (if (null? map) map
+      (cons (cons (car (car map)) (reverse (car (cdr map)))) (flipH cdr map))))
+
 
 
 ;;
