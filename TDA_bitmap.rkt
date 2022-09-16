@@ -1,7 +1,8 @@
 #lang racket
 
+(require "TDA_pixmap.rkt")
+
 (provide pixbit-d)
-(provide get_type)
 (provide get_x_bit)
 (provide get_y_bit)
 (provide get_bit)
@@ -13,8 +14,7 @@
 (define (pixbit-d pos_x pos_y bit depth)
   (list pos_x pos_y bit depth))
 
-(define (get_type pix)
-  (first pix))
+
 (define (get_x_bit pix)
   (second pix))
 (define (get_y_bit pix)
@@ -31,5 +31,5 @@
 (define (hexmap? pix)
   (if (eq? (get_type pix) "pixhex-d") #t #f))
 
-(define (replace_x pixa pixb)
-  (if (= (get_x_bit pixa) (get_x_bit pixb)) (pixbit-d "pixbit-d" (get_x_bit pixb) ))aa
+;(define (replace_x pixa pixb)
+ ; (if (= (get_x_bit pixa) (get_x_bit pixb)) (pixbit-d "pixbit-d" (get_x_bit pixb) ))
