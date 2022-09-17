@@ -9,6 +9,8 @@
 (provide get_b)
 (provide get_d_rgb)
 (provide pixmap?)
+(provide replace_x)
+(provide replace_y)
 
 
 (define (pixrgb-d pos_x pos_y r g b d)
@@ -17,6 +19,15 @@
 
 (define (get_type pix)
   (first pix))
+
+(define (replace_x px x)
+  (cons x (cdr px)))
+(define (replace_y px y)
+  (append (cons (car px) (list y)) (cddr px)))
+
+
+
+
 (define (get_x_rgb pix)
   (second pix))
 (define (get_y_rgb pix)
