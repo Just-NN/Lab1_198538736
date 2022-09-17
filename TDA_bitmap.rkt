@@ -1,6 +1,6 @@
 #lang racket
 
-(require "TDA_pixmap.rkt")
+(require "TDA_pixel.rkt")
 
 (provide pixbit-d)
 (provide get_x_bit)
@@ -9,10 +9,15 @@
 (provide get_depth_bit)
 (provide bitmap?)
 
-; pixbit-d consistirá en posx posy bit(0|1) depth
 
-(define (pixbit-d pos_x pos_y bit depth)
-  (list pos_x pos_y bit depth))
+; pixel de prueba
+(define pixtest '("pixbit-d" 0 0 0 1))
+
+
+; pixbit-d consistirá en id posx posy bit(0|1) depth
+
+(define (pixbit-d id pos_x pos_y bit depth)
+  (list id pos_x pos_y bit depth))
 
 
 (define (get_x_bit pix)
@@ -33,3 +38,12 @@
 
 ;(define (replace_x pixa pixb)
  ; (if (= (get_x_bit pixa) (get_x_bit pixb)) (pixbit-d "pixbit-d" (get_x_bit pixb) ))
+
+
+;modificadores
+
+(define (replace_x_bit px x)
+  (pixbit-d (get_type px) x (get_y_bit px) (get_bit px) (get_depth_bit px)))
+
+(define (replace_y_bit px y)
+  (pixbit-d (get_type px) (get_x_bit px) y (get_bit px) (get_depth_bit px)))

@@ -1,5 +1,8 @@
 #lang racket
 
+
+(require "TDA_pixel.rkt")
+
 (provide pixrgb-d)
 (provide get_type)
 (provide get_x_rgb)
@@ -9,24 +12,19 @@
 (provide get_b)
 (provide get_d_rgb)
 (provide pixmap?)
-(provide replace_x)
-(provide replace_y)
+(provide replace_x_rgb)
+(provide replace_y_rgb)
 
 
+;constructor
 (define (pixrgb-d pos_x pos_y r g b d)
   (list pos_x pos_y r g b d))
 
 
-(define (get_type pix)
-  (first pix))
-
-(define (replace_x px x)
-  (cons x (cdr px)))
-(define (replace_y px y)
-  (append (cons (car px) (list y)) (cddr px)))
 
 
 
+; selectores
 
 (define (get_x_rgb pix)
   (second pix))
@@ -43,4 +41,10 @@
 
 (define (pixmap? pix)
   (if (eq? (get_type pix) "pixrgb-d") #t #f))
-  
+
+;modificadores
+
+(define (replace_x_rgb px x)
+  (pixrgb-d (get_type px) x (get_y_rgb px) (get_r px) (get_g px) (get_b px) (get_d_rgb px)))
+(define (replace_y_rgb px y)
+  (pixrgb-d (get_type px) (get_x_rgb px) y (get_r px) (get_g px) (get_b px) (get_d_rgb px)))
