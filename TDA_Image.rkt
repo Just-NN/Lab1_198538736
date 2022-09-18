@@ -14,7 +14,7 @@
 ;; Nombre:  image
 ;; Dominio: Width (int) X Height (int) X [pixbit-d* |  pixrgb-d* |  pixhex-d*]
 ;; Recorrido:  image
-;; Descripción: Crea una matriz de ancho width, largo height y de tipo pixbit|pixrgb-d|pixhex-d
+;; Descripción: Crea una lista con el ancho, largo y una lista de pixeles 
 
 (define (image Width Height . pix)
   (list Width Height pix))
@@ -23,9 +23,9 @@
 
 ; selectores
 
-(define (get_h img)
-  (car img))
 (define (get_w img)
+  (car img))
+(define (get_h img)
   (cadr img))
 (define (get_pixlist img)
   (caddr img))
@@ -86,7 +86,7 @@
 ;; Nombre: flipH
 ;; Dominio: image
 ;; Recorrido: image
-;; Descripción: permite invertir una imagen horizontalmente
+;; Descripción: permite invertir una imagen horizontalmente cambiando los valores x de cada pixel
 
 (define (flipH img)
   (define (flipHH W W2 pixlist aux)
@@ -99,7 +99,7 @@
 ;; Nombre: flipV
 ;; Dominio: image
 ;; Recorrido: image
-;; Descripción: permite invertir una imagen verticalmente
+;; Descripción: permite invertir una imagen verticalmente los valores y de cada pixel
 
 (define (flipV img)
   (define (flipVV H H2 pixlist aux)
@@ -111,14 +111,45 @@
 
 
 ;(flipo 2 (get_pixlist test) '())
-(flipH test)
-(display "------------\n")
-(flipH testhex)
-(display "------------\n")
-(flipH testrgb)
-(display "------------\n")
-(flipV test)
-(display "------------\n")
-(flipV testhex)
-(display "------------\n")
-(flipV testrgb)
+;(flipH test)
+;(display "------------\n")
+;(flipH testhex)
+;(display "------------\n")
+;(flipH testrgb)
+;(display "------------\n")
+;(flipV test)
+;(display "------------\n")
+;(flipV testhex)
+;(display "------------\n")
+;(flipV testrgb)
+;(display "------------\n")
+
+
+
+(define (dentro_x? p x1 x2)
+  (if (or (and (> (get_x p) x1) (< (get_x p) x2))
+          (or (= (get_x p) x1) (= (get_x p) x2))) #t #f))
+(define (dentro_y? p x1 x2)
+  (if (or (and (> (get_y p) x1) (< (get_y p) x2))
+          (or (= (get_y p) x1) (= (get_y p) x2))) #t #f))
+(display "\n---\n")
+(dentro_x? (car (get_pixlist test)) 1 1)
+(display "\n---\n")
+
+;;
+;; Nombre: crop
+;; Dominio: image X x1 (int) X y1 (int) X x2 (int) X y2 (int)
+;; Recorrido: image
+;; Descripción: permite recortar una imagen a partir de 2 coordenadas, entregando una imagen con su lista de pixeles recortada
+;; conteniendo sólo los pixeles dentro de los valores solicitados
+
+(define (crop img x1 y1 x2 y2)
+  (define (cropaux x1 y1 x2 y2 pl aux)
+    (if (null? pl) (image (get_w img) (get_h img) (reverse aux))
+        (if (and (dentro_x? (car pl) x1 x2) (dentro_y? (car pl) y1 y2)) (cropaux x1 y1 x2 y2 (cdr pl) (cons (car pl) aux))
+            (cropaux x1 y1 x2 y2 (cdr pl) aux))))
+  (cropaux x1 y1 x2 y2 (get_pixlist img) '()))
+
+;(display (get_pixlist test))
+;(display "\n---\n")
+(crop test 0 0 1 0)

@@ -25,6 +25,19 @@
 
 
 
+(define (columna H P C)
+  (if (= H 0) C
+      (columna (- H 1) (cdr P) (cons C (car P)))))
+
+(define (bitwrap H W pix)
+  (define (bitmap H H2 W pix C map)
+    (if (= W 0) map
+        (if (= H 0) (bitmap H2 H2 (- W 1) pix '() (cons map C))
+            (bitmap (- H 1) H2 W (cdr pix) (cons C (car pix)) map))))
+  (bitmap H H W pix '() '()))
+
+
+
 ;;
 ;; Nombre: bitmap?
 ;; Dominio: image
