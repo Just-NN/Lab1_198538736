@@ -152,4 +152,9 @@
 
 ;(display (get_pixlist test))
 ;(display "\n---\n")
-(crop test 0 0 1 0)
+;(crop test 0 0 1 0)
+
+; conversor
+; básicamente tengo que usar format para meterle números y string-append para meterle letras
+
+
