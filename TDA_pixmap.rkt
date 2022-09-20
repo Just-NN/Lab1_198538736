@@ -2,6 +2,7 @@
 
 
 (require "TDA_pixel.rkt")
+(require "TDA_hexmap.rkt")
 
 (provide pixrgb-d)
 (provide get_type)
@@ -44,4 +45,55 @@
   (pixrgb-d (get_type px) x (get_y px) (get_r px) (get_g px) (get_b px) (get_d_rgb px)))
 (define (replace_y_rgb px y)
   (pixrgb-d (get_type px) (get_x px) y (get_r px) (get_g px) (get_b px) (get_d_rgb px)))
+
+;(define (pixRGB->pixHEX px)
+;  ())
+
+(define (divhex a)
+  (/ a 16.0))
+
+(define (integer a b)
+  (if (> 1 a) b
+      (integer (- a 1) (+ b 1))))
+
+(define (decimal a)
+  (if (> 1 a) a
+      (decimal (- a 1))))
+
+(define (abcdef a)
+  (cond
+    [(= a 10) "A"]
+    [(= a 11) "B"]
+    [(= a 12) "C"]
+    [(= a 13) "D"]
+    [(= a 14) "E"]
+    [(= a 15) "F"]
+    [else null]))
+
+(define (dec_to_int a)
+  (* a 16))
+(define (str_abc a hex)
+  (string-append hex (abcdef (integer (divhex a) 0))))
+(define (str_num a hex)
+  (format hex a))
+
+
+(define (f a hex)
+  (if (integer? a) (str_num a hex)
+      (str_abc (dec_to_int a) hex)))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
