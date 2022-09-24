@@ -1,11 +1,7 @@
 #lang racket
 
 
-(provide bitmap?)
-(provide pixmap?)
-(provide hexmap?)
-
-
+(provide (all-defined-out))
 
 
 (define (bitmap? pix)

@@ -3,11 +3,7 @@
 
 (require "TDA_pixel.rkt")
 
-(provide pixhex-d)
-(provide get_hex)
-(provide get_d_hex)
-(provide hexmapp?)
-
+(provide (all-defined-out))
 
 
 ; constructor de pixhex-d

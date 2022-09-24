@@ -2,16 +2,11 @@
 
 (require "TDA_pixel.rkt")
 
-(provide pixbit-d)
-
-(provide get_bit)
-(provide get_depth_bit)
-(provide bitmapp?)
-
+(provide (all-defined-out))
 
 
 ; pixel de prueba
-(define pixtest '("pixbit-d" 0 0 0 1))
+
 
 
 ; pixbit-d consistirá en id posx posy bit(0|1) depth

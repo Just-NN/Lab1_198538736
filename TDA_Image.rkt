@@ -5,6 +5,7 @@
 (require "TDA_bitmap.rkt")
 (require "TDA_hexmap.rkt")
 (require "TDA_pixel.rkt")
+(require "TDA_pixbit.rkt")
 
 
 ; probar con (image 2 2 '("pixbit-d" 0 0 0 1) '("pixbit-d" 1 0 0 1) '("pixbit-d" 0 1 0 1) '("pixbit-d" 1 1 0 1))

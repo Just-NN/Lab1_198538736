@@ -1,13 +1,6 @@
 #lang racket
 
-(provide get_type)
-(provide get_x)
-(provide get_y)
-(provide replace_x)
-(provide replace_y)
-(provide pixtest)
-(provide pixtest2)
-(provide pixtest3)
+(provide (all-defined-out))
 
 
 (define pixtest '("pixbit-d" 0 0 0 1))
