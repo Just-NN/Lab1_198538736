@@ -4,15 +4,9 @@
 (require "TDA_pixel.rkt")
 (require "TDA_hexmap.rkt")
 
-(provide pixrgb-d)
-(provide get_type)
-(provide get_r)
-(provide get_g)
-(provide get_b)
-(provide get_d_rgb)
-(provide pixmapp?)
-(provide replace_x_rgb)
-(provide replace_y_rgb)
+(provide (all-defined-out))
+
+
 
 
 
@@ -49,16 +43,17 @@
 ;(define (pixRGB->pixHEX px)
 ;  ())
 
+
+
 (define (divhex a)
   (/ a 16.0))
 
-(define (integer a b)
-  (if (> 1 a) b
-      (integer (- a 1) (+ b 1))))
+(define (to_int a)
+  (exact-floor a))
 
-(define (decimal a)
+(define (to_decimal a)
   (if (> 1 a) a
-      (decimal (- a 1))))
+      (to_decimal (- a 1))))
 
 (define (abcdef a)
   (cond
@@ -71,21 +66,34 @@
     [else null]))
 
 (define (dec_to_int a)
-  (* a 16))
+  (to_int (* a 16)))
+
 (define (str_abc a hex)
-  (string-append hex (abcdef (integer (divhex a) 0))))
+  (string-append hex (abcdef (to_int (divhex a)))))
+
 (define (str_num a hex)
-  (format hex a))
+  (~a hex a))
+
+(define (conversor_elemento a)
+  (if (= (to_int a) 0) "0"
+      (caja_negra a "")))
+
+(define (conversion_de_pares a hx)
+  (string-append (conversor_elemento (to_int (divhex a))) (conversor_elemento (dec_to_int (to_decimal (divhex a))))))
 
 
-(define (f a hex)
-  (if (integer? a) (str_num a hex)
+(define (caja_negra a hex)
+  (if (< a 10) (str_num a hex)
       (str_abc (dec_to_int a) hex)))
 
 
-
-
-
+(define (wrap_rgb_to rgb)
+  (define (rgb_to_hex rgb hex)
+    (if (null? rgb)
+        hex
+        (rgb_to_hex (cdr rgb) (string-append hex (conversion_de_pares (car rgb) "")))))
+        
+  (rgb_to_hex rgb "#"))
 
 
 

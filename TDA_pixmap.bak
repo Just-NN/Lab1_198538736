@@ -1,35 +1,99 @@
 #lang racket
 
+
+(require "TDA_pixel.rkt")
+(require "TDA_hexmap.rkt")
+
 (provide pixrgb-d)
 (provide get_type)
-(provide get_x_bit)
-(provide get_y_bit)
 (provide get_r)
 (provide get_g)
 (provide get_b)
-(provide get_d)
-(provide pixmap?)
+(provide get_d_rgb)
+(provide pixmapp?)
+(provide replace_x_rgb)
+(provide replace_y_rgb)
 
 
-(define (pixrgb-d pos_x pos_y r g b d)
-  (list pos_x pos_y bit depth))
 
 
-(define (get_type pix)
-  (first pix))
-(define (get_x_bit pix)
-  (second pix))
-(define (get_y_bit pix)
-  (third pix))
+;constructor
+(define (pixrgb-d id pos_x pos_y r g b d)
+  (list id pos_x pos_y r g b d))
+
+
+
+
+
+; selectores
+
 (define (get_r pix)
   (fourth pix))
 (define (get_g pix)
   (fifth pix))
 (define (get_b pix)
-  (sixth pix)
-(define (get_d pix)
+  (sixth pix))
+(define (get_d_rgb pix)
   (seventh pix))
 
-(define (pixmap? pix)
+(define (pixmapp? pix)
   (if (eq? (get_type pix) "pixrgb-d") #t #f))
-  
+
+;modificadores
+
+(define (replace_x_rgb px x)
+  (pixrgb-d (get_type px) x (get_y px) (get_r px) (get_g px) (get_b px) (get_d_rgb px)))
+(define (replace_y_rgb px y)
+  (pixrgb-d (get_type px) (get_x px) y (get_r px) (get_g px) (get_b px) (get_d_rgb px)))
+
+;(define (pixRGB->pixHEX px)
+;  ())
+
+(define (divhex a)
+  (/ a 16.0))
+
+(define (integer a)
+  (exact-floor a))
+
+(define (decimal a)
+  (if (> 1 a) a
+      (decimal (- a 1))))
+
+(define (abcdef a)
+  (cond
+    [(= a 10) "A"]
+    [(= a 11) "B"]
+    [(= a 12) "C"]
+    [(= a 13) "D"]
+    [(= a 14) "E"]
+    [(= a 15) "F"]
+    [else null]))
+
+(define (dec_to_int a)
+  (* a 16))
+(define (str_abc a hex)
+  (string-append hex (abcdef (integer (divhex a)))))
+(define (str_num a hex)
+  (~a hex a))
+
+
+(define (f a hex)
+  (if (< a 10) (str_num a hex)
+      (str_abc (dec_to_int a) hex)))
+
+
+(define hextest '(255 160 189))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
