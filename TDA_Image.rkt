@@ -158,4 +158,14 @@
 ; conversor
 ; básicamente tengo que usar format para meterle números y string-append para meterle letras
 
+;;
+;; Nombre: imgRGB->imgHex
+;; Dominio: image 
+;; Recorrido: image
+;; Descripción: Permite convertir una imagen de tipo pixrgb-d a pixhex-d, por medio de una recursión
+;; que toma sus pixeles y cambia los valores rgb a un string en hex, luego se construye una nueva
+;; imagen con los nuevos valores y el ID correspondiente
+
+(define (imgRGB->imgHex img)
+  (image (get_w img) (get_h img) (list_to_hex (get_pixlist img) '())))
 

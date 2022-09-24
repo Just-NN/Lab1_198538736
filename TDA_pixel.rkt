@@ -4,7 +4,7 @@
 
 
 (define pixtest '("pixbit-d" 0 0 0 1))
-(define pixtest2 '("pixrgb-d" 0 0 0 0 0 0))
+(define pixtest2 '("pixrgb-d" 0 0 255 3 16 0))
 (define pixtest3 '("pixhex-d" 0 0 0 0))
 
 

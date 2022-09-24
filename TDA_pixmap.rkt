@@ -29,6 +29,8 @@
   (sixth pix))
 (define (get_d_rgb pix)
   (seventh pix))
+(define (get_rgb pix)
+  (list (get_r pix) (get_g pix) (get_b pix)))
 
 (define (pixmapp? pix)
   (if (eq? (get_type pix) "pixrgb-d") #t #f))
@@ -94,6 +96,9 @@
         (rgb_to_hex (cdr rgb) (string-append hex (conversion_de_pares (car rgb) "")))))
         
   (rgb_to_hex rgb "#"))
+(define (list_to_hex pixlist aux)
+  (if (null? pixlist) (reverse aux)
+      (list_to_hex (cdr pixlist) (cons (list "pixhex-d" (wrap_rgb_to (get_rgb (car pixlist))) (get_d_rgb (car pixlist))) aux))))
 
 
 
