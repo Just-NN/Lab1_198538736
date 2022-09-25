@@ -12,14 +12,16 @@
 
 
 ;constructor
-(define (pixrgb-d id pos_x pos_y r g b d)
-  (list id pos_x pos_y r g b d))
+(define (pixrgb-d pos_x pos_y r g b d)
+  (list "pixrgb-d" pos_x pos_y r g b d))
 
 
 
 
 
 ; selectores
+
+
 
 (define (get_r pix)
   (fourth pix))
@@ -29,6 +31,8 @@
   (sixth pix))
 (define (get_d_rgb pix)
   (seventh pix))
+
+
 (define (get_rgb pix)
   (list (get_r pix) (get_g pix) (get_b pix)))
 

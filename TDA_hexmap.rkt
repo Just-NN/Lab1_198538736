@@ -9,8 +9,8 @@
 ; constructor de pixhex-d
 ; Dominio: pos_x (int) X 
 
-(define (pixhex-d id pos_x pos_y hex d)
-  (list id pos_x pos_y hex d))
+(define (pixhex-d pos_x pos_y hex d)
+  (list "pixhex-d" pos_x pos_y hex d))
 
 
 ; selectores de pixhex

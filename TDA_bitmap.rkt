@@ -11,8 +11,8 @@
 
 ; pixbit-d consistirá en id posx posy bit(0|1) depth
 
-(define (pixbit-d id pos_x pos_y bit depth)
-  (list id pos_x pos_y bit depth))
+(define (pixbit-d pos_x pos_y bit depth)
+  (list "pixbit-d" pos_x pos_y bit depth))
 
 
 

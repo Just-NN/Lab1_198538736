@@ -5,7 +5,8 @@
 (require "TDA_bitmap.rkt")
 (require "TDA_hexmap.rkt")
 (require "TDA_pixel.rkt")
-(require "TDA_pixbit.rkt")
+(provide (all-defined-out))
+
 
 
 ; probar con (image 2 2 '("pixbit-d" 0 0 0 1) '("pixbit-d" 1 0 0 1) '("pixbit-d" 0 1 0 1) '("pixbit-d" 1 1 0 1))
@@ -18,7 +19,8 @@
 ;; Descripción: Crea una lista con el ancho, largo y una lista de pixeles 
 
 (define (image Width Height . pix)
-  (list Width Height pix))
+  (if (list? pix) (cons Width (cons Height pix))
+      (list Width Height pix)))
 
 
 
@@ -172,9 +174,14 @@
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;
+(define (value_list img)
+  (define (list_gen input output)
+    (if (null? input) output
+        (list_gen (cdr input) (cons (get_values (car input)) output))))
+  (list_gen (get_pixlist img) '()))
 (define (filtro a lista output)
   (if (null? lista) (reverse output)
-      (if (eq? a (car lista)) (filtro a (cdr lista) (cons a output))
+      (if (equal? a (car lista)) (filtro a (cdr lista) (cons a output))
           (filtro a (cdr lista) output))))
 
 (define (clean-list a lista)
@@ -194,6 +201,9 @@
   (define (filter-loop lista output)
     (if (null? lista) output
       (filter-loop (clean-list (car lista) lista) (cons  (cons (car lista) (length (filtro (car lista) lista '()))) output))))
-  (filter-loop (get_pixlist img) '()))
+  (filter-loop (value_list img) '()))
 
+(display "histograma: ")
 (histogram test)
+
+
