@@ -169,3 +169,31 @@
 (define (imgRGB->imgHex img)
   (image (get_w img) (get_h img) (list_to_hex (get_pixlist img) '())))
 
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+(define (filtro a lista output)
+  (if (null? lista) (reverse output)
+      (if (eq? a (car lista)) (filtro a (cdr lista) (cons a output))
+          (filtro a (cdr lista) output))))
+
+(define (clean-list a lista)
+  (remove* (filtro a lista '()) lista))
+
+;;
+;; Nombre: histogram
+;; Dominio: image 
+;; Recorrido: histogram
+;; Descripción: Recibe una imagen y cuenta cuántas veces se repite cada valor para el pixel, retornando entonces una
+;; lista de pares: valor - frecuencia
+
+
+;; TENGO QUE CONSIDERAR SÓLO LOS VALORES, OJO QUE SON 3 CASOS, PUESTO QUE HAY 3 TIPOS DE PIXELES CON DISTINTOS FORMATOS DE VALORES
+
+(define (histogram img)
+  (define (filter-loop lista output)
+    (if (null? lista) output
+      (filter-loop (clean-list (car lista) lista) (cons  (cons (car lista) (length (filtro (car lista) lista '()))) output))))
+  (filter-loop (get_pixlist img) '()))
+
+(histogram test)
