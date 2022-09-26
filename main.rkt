@@ -92,3 +92,16 @@
 (histogram img6)
 (histogram img7)
 
+(display "rotate90\n")
+(define img18 (rotate90 img1))
+(define img19 (rotate90 img2))
+(define img20 (rotate90 img3))
+(define img21 (rotate90 img4))
+(define img22 (rotate90 img5))
+(define img23 (rotate90 img6))
+(define img24 (rotate90 img7))
+
+(display img1)
+(display "\n")
+(display img18)
+

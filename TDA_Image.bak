@@ -5,6 +5,8 @@
 (require "TDA_bitmap.rkt")
 (require "TDA_hexmap.rkt")
 (require "TDA_pixel.rkt")
+(provide (all-defined-out))
+
 
 
 ; probar con (image 2 2 '("pixbit-d" 0 0 0 1) '("pixbit-d" 1 0 0 1) '("pixbit-d" 0 1 0 1) '("pixbit-d" 1 1 0 1))
@@ -17,6 +19,9 @@
 ;; Descripción: Crea una lista con el ancho, largo y una lista de pixeles 
 
 (define (image Width Height . pix)
+  (list Width Height pix))
+
+(define (imageaux Width Height pix)
   (list Width Height pix))
 
 
@@ -33,9 +38,11 @@
 ; se prueba y se guarda para probar en el futuro
 
 (define test (image 2 2 '("pixbit-d" 0 0 0 1) '("pixbit-d" 1 0 0 1) '("pixbit-d" 0 1 0 1) '("pixbit-d" 1 1 0 1)))
+
 (define test2 (image 2 2 '("pixbit-d" 0 0 0 1) '("pixbit-d" 1 0 0 1) '("pixbit-d" 0 1 0 1) ))
 (define testhex (image 2 2 pixtest3 pixtest3 pixtest3 pixtest3))
 (define testrgb (image 2 2 pixtest2 pixtest2 pixtest2 pixtest2))
+
 
 
 
@@ -145,16 +152,82 @@
 
 (define (crop img x1 y1 x2 y2)
   (define (cropaux x1 y1 x2 y2 pl aux)
-    (if (null? pl) (image (get_w img) (get_h img) (reverse aux))
+    (if (null? pl) (imageaux (+ (get_x (car (reverse aux))) 1) (+ (get_y (car (reverse aux))) 1) (reverse aux))
         (if (and (dentro_x? (car pl) x1 x2) (dentro_y? (car pl) y1 y2)) (cropaux x1 y1 x2 y2 (cdr pl) (cons (car pl) aux))
             (cropaux x1 y1 x2 y2 (cdr pl) aux))))
   (cropaux x1 y1 x2 y2 (get_pixlist img) '()))
 
-;(display (get_pixlist test))
-;(display "\n---\n")
-;(crop test 0 0 1 0)
+(display "\n-- crop --\n")
+(display (get_pixlist test))
+(display "\n---\n")
+(crop test 0 0 1 0)
 
 ; conversor
 ; básicamente tengo que usar format para meterle números y string-append para meterle letras
 
+;;
+;; Nombre: imgRGB->imgHex
+;; Dominio: image 
+;; Recorrido: image
+;; Descripción: Permite convertir una imagen de tipo pixrgb-d a pixhex-d, por medio de una recursión
+;; que toma sus pixeles y cambia los valores rgb a un string en hex, luego se construye una nueva
+;; imagen con los nuevos valores y el ID correspondiente
+
+(define (imgRGB->imgHex img)
+  (imageaux (car img) (cadr img) (convertir_lista (get_pixlist img) '())))
+(imgRGB->imgHex testrgb)
+
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+(define (value_list img)
+  (define (list_gen input output)
+    (if (null? input) output
+        (list_gen (cdr input) (cons (get_values (car input)) output))))
+  (list_gen (get_pixlist img) '()))
+(define (filtro a lista output)
+  (if (null? lista) (reverse output)
+      (if (equal? a (car lista)) (filtro a (cdr lista) (cons a output))
+          (filtro a (cdr lista) output))))
+
+(define (clean-list a lista)
+  (remove* (filtro a lista '()) lista))
+
+;;
+;; Nombre: histogram
+;; Dominio: image 
+;; Recorrido: histogram
+;; Descripción: Recibe una imagen y cuenta cuántas veces se repite cada valor para el pixel, retornando entonces una
+;; lista de pares: valor - frecuencia
+
+
+;; TENGO QUE CONSIDERAR SÓLO LOS VALORES, OJO QUE SON 3 CASOS, PUESTO QUE HAY 3 TIPOS DE PIXELES CON DISTINTOS FORMATOS DE VALORES
+
+(define (histogram img)
+  (define (filter-loop lista output)
+    (if (null? lista) output
+      (filter-loop (clean-list (car lista) lista) (cons  (cons (car lista) (length (filtro (car lista) lista '()))) output))))
+  (filter-loop (value_list img) '()))
+
+(display "histograma: ")
+(histogram test)
+
+
+;; Para poder rotar la imagen, hay que considerar sus posiciones como si fueran las de una matriz
+;; Así pues, se puede rotar una matriz si, primero, la transpones y, luego, la das vuelta horizontalmente
+;; Llevando esto al TDA image, podrían considerarse sus posiciones x e y para realizarlo
+
+(define (rotate90 img)
+  ;primero es transponer las posiciones individualmente usando swap_positions
+  (define (rotate-loop pixlist output)
+    (if (null? pixlist) (flipH(imageaux (get_w img) (get_h img) (reverse output)))
+        (rotate-loop (cdr pixlist) (cons (swap_positions (car pixlist)) output))))
+    
+  (rotate-loop (get_pixlist img) '())
+  )
+
+(display "antes del rotate\n")
+(display testrgb)
+(display "ahora viene el rotate \n")
+(display (histogram testrgb))
 

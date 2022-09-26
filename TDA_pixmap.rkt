@@ -39,15 +39,15 @@
 (define (pixmapp? pix)
   (if (eq? (get_type pix) "pixrgb-d") #t #f))
 
-;modificadores
+; modificadores
 
 (define (replace_x_rgb px x)
   (pixrgb-d (get_type px) x (get_y px) (get_r px) (get_g px) (get_b px) (get_d_rgb px)))
 (define (replace_y_rgb px y)
   (pixrgb-d (get_type px) (get_x px) y (get_r px) (get_g px) (get_b px) (get_d_rgb px)))
 
-;(define (pixRGB->pixHEX px)
-;  ())
+; otras (se usan para pixRGB->pixHEX)
+
 
 
 
@@ -106,7 +106,6 @@
   (pixhex-d (cadr pixrgb) (caddr pixrgb) (wrap_rgb_to (get_rgb pixrgb)) (seventh pixrgb)))
 (pix-rgb-to-hex pixtest2)
 
-(define weaita (list pixtest2 pixtest2 pixtest2 pixtest2))
 
 (define (convertir_lista lista aux)
   (if (null? lista) (reverse aux)
@@ -114,8 +113,7 @@
 
 
 
-;(define wea '(pixtest2 pixtest2 pixtest2 pixtest2))
-;(map pix-rgb-to-hex wea)
+
 
 
 

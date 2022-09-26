@@ -93,11 +93,11 @@
 ;; Nombre: flipH
 ;; Dominio: image
 ;; Recorrido: image
-;; Descripción: permite invertir una imagen horizontalmente cambiando los valores x de cada pixel
+;; Descripción: permite invertir una imagen horizontalmente, cambiando los valores x de cada pixel
 
 (define (flipH img)
   (define (flipHH W W2 pixlist aux)
-    (if (null? pixlist) (image (get_h img) (get_w img) (reverse aux))
+    (if (null? pixlist) (imageaux (get_w img) (get_h img) (reverse aux))
         (if (= W -1) (flipHH W2 W2 pixlist aux)
             (flipHH (- W 1) W2 (cdr pixlist) (cons (replace_x (car pixlist) W) aux)))))
     (flipHH (- (get_w img) 1) (- (get_w img) 1) (get_pixlist img) '()))
@@ -106,11 +106,11 @@
 ;; Nombre: flipV
 ;; Dominio: image
 ;; Recorrido: image
-;; Descripción: permite invertir una imagen verticalmente los valores y de cada pixel
+;; Descripción: permite invertir una imagen verticalmente, cambiando los valores y de cada pixel
 
 (define (flipV img)
   (define (flipVV H H2 pixlist aux)
-    (if (null? pixlist) (image (get_h img) (get_w img) (reverse aux))
+    (if (null? pixlist) (imageaux (get_w img) (get_h img) (reverse aux))
         (if (= H -1) (flipVV H2 H2 pixlist aux)
             (flipVV (- H 1) H2 (cdr pixlist) (cons (replace_y (car pixlist) H) aux)))))
     (flipVV (- (get_w img) 1) (- (get_w img) 1) (get_pixlist img) '()))
@@ -152,7 +152,7 @@
 
 (define (crop img x1 y1 x2 y2)
   (define (cropaux x1 y1 x2 y2 pl aux)
-    (if (null? pl) (image (get_w img) (get_h img) (reverse aux))
+    (if (null? pl) (imageaux (+ (get_x (car (reverse aux))) 1) (+ (get_y (car (reverse aux))) 1) (reverse aux))
         (if (and (dentro_x? (car pl) x1 x2) (dentro_y? (car pl) y1 y2)) (cropaux x1 y1 x2 y2 (cdr pl) (cons (car pl) aux))
             (cropaux x1 y1 x2 y2 (cdr pl) aux))))
   (cropaux x1 y1 x2 y2 (get_pixlist img) '()))
@@ -200,9 +200,6 @@
 ;; Descripción: Recibe una imagen y cuenta cuántas veces se repite cada valor para el pixel, retornando entonces una
 ;; lista de pares: valor - frecuencia
 
-
-;; TENGO QUE CONSIDERAR SÓLO LOS VALORES, OJO QUE SON 3 CASOS, PUESTO QUE HAY 3 TIPOS DE PIXELES CON DISTINTOS FORMATOS DE VALORES
-
 (define (histogram img)
   (define (filter-loop lista output)
     (if (null? lista) output
@@ -217,8 +214,28 @@
 ;; Así pues, se puede rotar una matriz si, primero, la transpones y, luego, la das vuelta horizontalmente
 ;; Llevando esto al TDA image, podrían considerarse sus posiciones x e y para realizarlo
 
-(define (rotate90 image)
-  ;primero es transponer las posiciones individualmente usando swap_positions
-  (map swap_positions image)
+(define (rotate90 img)
+  ; primero es transponer las posiciones individualmente usando swap_positions y luego se usa flipH
+  ; para poder terminar el proceso
+  (define (rotate-loop pixlist output)
+    (if (null? pixlist) (flipH (imageaux (get_h img) (get_w img) (reverse output)))
+        (rotate-loop (cdr pixlist) (cons (swap_positions (car pixlist)) output))))
+    
+  (rotate-loop (get_pixlist img) '())
   )
 
+
+
+
+
+(define img2 (image 2 2
+                  (pixrgb-d 0 0 255 0 0 10)
+                  (pixrgb-d 0 1 0 255 0 20)
+                  (pixrgb-d 1 0 0 0 255 10)
+                  (pixrgb-d 1 1 255 255 255  1)))
+
+(display "antes del rotate\n")
+(display img2)
+(display "ahora viene el rotate \n")
+
+(display (rotate90 img2))

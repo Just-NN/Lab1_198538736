@@ -6,7 +6,7 @@
 (provide (all-defined-out))
 
 
-(define pixtest '("pixbit-d" 0 0 0 1))
+(define pixtest '("pixbit-d" 0 2 0 1))
 (define pixtest2 (list "pixrgb-d" 0 1 255 16 3 420))
 (define pixtest3 '("pixhex-d" 0 0 "#FF00C0" 0))
 
@@ -20,8 +20,8 @@
   (third pix))
 (define (get_values pix)
   (cond
-    [(or (eq? (get_type pix) "pixbit-d") (eq? (get_type pix) "pixhex-d")) (list (cadddr pix))]
-    [(eq? (get_type pix) "pixrgb-d") (get_eregebe pix)]))
+    [(or (equal? (get_type pix) "pixbit-d") (equal? (get_type pix) "pixhex-d")) (list (fourth pix))]
+    [(equal? (get_type pix) "pixrgb-d") (get_eregebe pix)]))
 
 
 ; modificadores
@@ -32,11 +32,11 @@
   (append (list (get_type px) (get_x px) y)  (cdddr px)))
 (define (swap_positions pix)
   (cond
-    [(eq? (car pix) "pixbit-d")
-     (list "pixbit-d" (get_y pix) (get_x pix) (cadddr pix) (fifth pix))]
-    [(eq? (car pix) "pixhex-d")
-     (list "pixhex-d" (get_y pix) (get_x pix) (cadddr pix) (fifth pix))]
-    [(eq? (car pix) "pixrgb-d")
+    [(equal? (car pix) "pixbit-d")
+     (list "pixbit-d" (get_y pix) (get_x pix) (fourth pix) (fifth pix))]
+    [(equal? (car pix) "pixhex-d")
+     (list "pixhex-d" (get_y pix) (get_x pix) (fourth pix) (fifth pix))]
+    [(equal? (car pix) "pixrgb-d")
      (list "pixrgb-d" (get_y pix) (get_x pix) (get_a pix) (get_e pix) (get_i pix) (seventh pix))]))
 
 
