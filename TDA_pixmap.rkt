@@ -93,21 +93,29 @@
       (str_abc (dec_to_int a) hex)))
 
 
+
 (define (wrap_rgb_to rgb)
   (define (rgb_to_hex rgb hex)
     (if (null? rgb)
         hex
         (rgb_to_hex (cdr rgb) (string-append hex (conversion_de_pares (car rgb) "")))))
-        
   (rgb_to_hex rgb "#"))
-(define (list_to_hex pixlist aux)
-  (if (null? pixlist) (reverse aux)
-      (list_to_hex (cdr pixlist) (cons (list "pixhex-d" (wrap_rgb_to (get_rgb (car pixlist))) (get_d_rgb (car pixlist))) aux))))
+
+
+(define (pix-rgb-to-hex pixrgb)
+  (pixhex-d (cadr pixrgb) (caddr pixrgb) (wrap_rgb_to (get_rgb pixrgb)) (seventh pixrgb)))
+(pix-rgb-to-hex pixtest2)
+
+(define weaita (list pixtest2 pixtest2 pixtest2 pixtest2))
+
+(define (convertir_lista lista aux)
+  (if (null? lista) (reverse aux)
+      (convertir_lista (cdr lista) (cons (pix-rgb-to-hex (car lista)) aux))))
 
 
 
-
-
+;(define wea '(pixtest2 pixtest2 pixtest2 pixtest2))
+;(map pix-rgb-to-hex wea)
 
 
 

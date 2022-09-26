@@ -19,8 +19,10 @@
 ;; Descripción: Crea una lista con el ancho, largo y una lista de pixeles 
 
 (define (image Width Height . pix)
-  (if (list? pix) (cons Width (cons Height pix))
-      (list Width Height pix)))
+  (list Width Height pix))
+
+(define (imageaux Width Height pix)
+  (list Width Height pix))
 
 
 
@@ -36,9 +38,11 @@
 ; se prueba y se guarda para probar en el futuro
 
 (define test (image 2 2 '("pixbit-d" 0 0 0 1) '("pixbit-d" 1 0 0 1) '("pixbit-d" 0 1 0 1) '("pixbit-d" 1 1 0 1)))
+
 (define test2 (image 2 2 '("pixbit-d" 0 0 0 1) '("pixbit-d" 1 0 0 1) '("pixbit-d" 0 1 0 1) ))
 (define testhex (image 2 2 pixtest3 pixtest3 pixtest3 pixtest3))
 (define testrgb (image 2 2 pixtest2 pixtest2 pixtest2 pixtest2))
+
 
 
 
@@ -153,9 +157,10 @@
             (cropaux x1 y1 x2 y2 (cdr pl) aux))))
   (cropaux x1 y1 x2 y2 (get_pixlist img) '()))
 
-;(display (get_pixlist test))
-;(display "\n---\n")
-;(crop test 0 0 1 0)
+(display "\n-- crop --\n")
+(display (get_pixlist test))
+(display "\n---\n")
+(crop test 0 0 1 0)
 
 ; conversor
 ; básicamente tengo que usar format para meterle números y string-append para meterle letras
@@ -169,7 +174,8 @@
 ;; imagen con los nuevos valores y el ID correspondiente
 
 (define (imgRGB->imgHex img)
-  (image (get_w img) (get_h img) (list_to_hex (get_pixlist img) '())))
+  (imageaux (car img) (cadr img) (convertir_lista (get_pixlist img) '())))
+(imgRGB->imgHex testrgb)
 
 
 
@@ -206,4 +212,13 @@
 (display "histograma: ")
 (histogram test)
 
+
+;; Para poder rotar la imagen, hay que considerar sus posiciones como si fueran las de una matriz
+;; Así pues, se puede rotar una matriz si, primero, la transpones y, luego, la das vuelta horizontalmente
+;; Llevando esto al TDA image, podrían considerarse sus posiciones x e y para realizarlo
+
+(define (rotate90 image)
+  ;primero es transponer las posiciones individualmente usando swap_positions
+  (map swap_positions image)
+  )
 

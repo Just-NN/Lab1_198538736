@@ -7,7 +7,7 @@
 
 
 (define pixtest '("pixbit-d" 0 0 0 1))
-(define pixtest2 '("pixrgb-d" 0 0 255 3 16 0))
+(define pixtest2 (list "pixrgb-d" 0 1 255 16 3 420))
 (define pixtest3 '("pixhex-d" 0 0 "#FF00C0" 0))
 
 
@@ -30,6 +30,14 @@
 
 (define (replace_y px y)
   (append (list (get_type px) (get_x px) y)  (cdddr px)))
+(define (swap_positions pix)
+  (cond
+    [(eq? (car pix) "pixbit-d")
+     (list "pixbit-d" (get_y pix) (get_x pix) (cadddr pix) (fifth pix))]
+    [(eq? (car pix) "pixhex-d")
+     (list "pixhex-d" (get_y pix) (get_x pix) (cadddr pix) (fifth pix))]
+    [(eq? (car pix) "pixrgb-d")
+     (list "pixrgb-d" (get_y pix) (get_x pix) (get_a pix) (get_e pix) (get_i pix) (seventh pix))]))
 
 
 ;; otro
