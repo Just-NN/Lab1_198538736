@@ -2,18 +2,15 @@
 
 
 (require "TDA_pixel.rkt")
-(require "TDA_hexmap.rkt")
+(require "TDA_pixhex-d.rkt")
 
 (provide (all-defined-out))
 
+;; Se define el TDA pixmap para poder trabajar el tipo de pixel
+;; mencionado, ya que es clave para poder generar una imagen.
+;; Se definen constructor, selectores, modificadores, pertenencia y otros
+;; para poder trabajar ciertas funciones en otros TDA
 ;;
-;; Nombre: 
-;; Dominio:  
-;; Recorrido: 
-;; Descripción: 
-;; Tipo de recursión: 
-
-
 
 
 
@@ -87,16 +84,6 @@
 (define (get_rgb pix)
   (list (get_r pix) (get_g pix) (get_b pix)))
 
-;;
-;; Nombre: pixmapp? 
-;; Dominio:  lista
-;; Recorrido: booleano
-;; Descripción: Recibe una lista (en general, los pixeles son listas) y utiliza get_type para determinar si el pixel es rgb
-;; Tipo de recursión: no tiene
-
-(define (pixmapp? pix)
-  (if (eq? (get_type pix) "pixrgb-d") #t #f))
-
 ; modificadores
 
 
@@ -120,6 +107,19 @@
 
 (define (replace_y_rgb px y)
   (pixrgb-d (get_type px) (get_x px) y (get_r px) (get_g px) (get_b px) (get_d_rgb px)))
+
+;; pertenencia
+
+;;
+;; Nombre: pixmapp? 
+;; Dominio:  lista
+;; Recorrido: booleano
+;; Descripción: Recibe una lista (en general, los pixeles son listas) y utiliza get_type para determinar si el pixel es rgb
+;; Tipo de recursión: no tiene
+
+(define (pixmapp? pix)
+  (if (eq? (get_type pix) "pixrgb-d") #t #f))
+
 
 ; otras (se usan para pixRGB->pixHEX)
 
